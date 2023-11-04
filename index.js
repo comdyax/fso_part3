@@ -59,6 +59,26 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+const generateID = () => {
+    return Math.floor(Math.random() * 99999999)
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    if(!body) {
+        return response.status(40).json({
+            error: 'content missing'
+        })
+    }
+    const newPerson = {
+        id: generateID(),
+        name: body.name,
+        number: body.number
+    }
+    phonebook = phonebook.concat(newPerson)
+    response.json(newPerson)
+})
+
 
 const PORT = 3001
 app.listen(PORT, () => {

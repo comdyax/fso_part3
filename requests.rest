@@ -5,3 +5,13 @@ GET http://localhost:3001/info
 ###
 
 DELETE http://localhost:3001/api/persons/1
+
+###
+
+POST http://localhost:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "John Coltrane",
+    "number": "312-44653-1245"
+}
