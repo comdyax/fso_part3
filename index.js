@@ -1,8 +1,19 @@
 const express = require('express')
 const nodemon = require('nodemon')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+
+morgan.token('input', (req, res) => {
+    return JSON.stringify(req.body)
+})
+
+/**
+ * Logs every Request to the Console in the predefined 'tiny' format + input format 
+ * 
+ */
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :input'))
 
 let phonebook = [
     {
@@ -75,19 +86,19 @@ app.post('/api/persons', (request, response) => {
             error: 'number is missing'
         })
     }
-    if(phonebook.map(p => p.name).includes(body.name)) {
+    if (phonebook.map(p => p.name).includes(body.name)) {
         return response.status(400).json({
             error: 'name must be unique'
         })
     }
-    
+
 
     const newPerson = {
         id: generateID(),
         name: body.name,
         number: body.number
     }
-    
+
     phonebook = phonebook.concat(newPerson)
     response.json(newPerson)
 })
