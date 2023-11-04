@@ -47,7 +47,7 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = phonebook.find(person => person.id === id)
-    if(person)
+    if (person)
         response.json(person)
     else
         response.status(404).end()
@@ -65,16 +65,29 @@ const generateID = () => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    if(!body) {
-        return response.status(40).json({
-            error: 'content missing'
+    if (!body.name) {
+        return response.status(400).json({
+            error: 'name is missing'
         })
     }
+    if (!body.number) {
+        return response.status(400).json({
+            error: 'number is missing'
+        })
+    }
+    if(phonebook.map(p => p.name).includes(body.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+    
+
     const newPerson = {
         id: generateID(),
         name: body.name,
         number: body.number
     }
+    
     phonebook = phonebook.concat(newPerson)
     response.json(newPerson)
 })
