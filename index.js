@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
-//Loads static content from dist directory
+//Loads static content from dist directory with production build
 app.use(express.static('dist'))
 
 morgan.token('input', (req, res) => {
