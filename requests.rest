@@ -42,3 +42,43 @@ Content-Type: application/json
 
 
 
+###
+
+GET https://phonebook-backend-6tqv.onrender.com/
+
+###
+
+DELETE https://phonebook-backend-6tqv.onrender.com/api/persons/1
+
+###
+
+POST https://phonebook-backend-6tqv.onrender.com/api/persons/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "John Coltrane",
+    "number": "312-44653-1245"
+}
+
+###
+
+POST https://phonebook-backend-6tqv.onrender.com/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "number": "312-44653-1245"
+}
+
+###
+
+POST https://phonebook-backend-6tqv.onrender.com/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "John Coltrane"
+}
+
+###
+
+POST https://phonebook-backend-6tqv.onrender.com/api/persons HTTP/1.1
+Content-Type: application/json
