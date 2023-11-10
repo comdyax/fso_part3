@@ -21,7 +21,7 @@ const personSchema = new mongoose.Schema({
 
 personSchema.set('toJSON', {
     transform: (document, retO) => {
-        retO.id = retO.toString()
+        retO.id = retO._id.toString()
         delete retO._id
         delete retO.__v
     }

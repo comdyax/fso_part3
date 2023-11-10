@@ -66,12 +66,20 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
+    Person.findById(request.params.id).then(person => {
+        if (person)
+            response.json(person)
+        else
+            response.status(404).end()
+    })
+    /**
     const id = Number(request.params.id)
     const person = phonebook.find(person => person.id === id)
     if (person)
         response.json(person)
     else
         response.status(404).end()
+     */
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -80,9 +88,11 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+/**
 const generateID = () => {
     return Math.floor(Math.random() * 99999999)
 }
+ */
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -96,22 +106,28 @@ app.post('/api/persons', (request, response) => {
             error: 'number is missing'
         })
     }
+    /**
     if (phonebook.map(p => p.name).includes(body.name)) {
         return response.status(400).json({
             error: 'name must be unique'
         })
     }
-
-
-    const newPerson = {
-        id: generateID(),
+    */
+    const newPerson = new Person({
         name: body.name,
         number: body.number
-    }
-
-    phonebook = phonebook.concat(newPerson)
-    response.json(newPerson)
+    })
+    //phonebook = phonebook.concat(newPerson)
+    newPerson.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 })
+
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint!' })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
