@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const nodemon = require('nodemon')
 const morgan = require('morgan')
 const app = express()
+const Person = require('./models/person')
 
 app.use(express.json())
 //Loads static content from dist directory with production build
@@ -16,7 +18,7 @@ morgan.token('input', (req, res) => {
  * 
  */
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :input'))
-
+/**
 let phonebook = [
     {
         "id": 1,
@@ -39,22 +41,28 @@ let phonebook = [
         "number": "39-23-6423122"
     }
 ]
+*/
 
 app.get('/info', (request, response) => {
-    console.log(new Date().toString());
-    response.send(`
+    Person.countDocuments({}).then(length => {
+        console.log(length)
+        response.send(`
         <p>
-            Phonebook has info for ${phonebook.length} people.
+            Phonebook has info for ${length} people.
         </p>
         <p>
             ${new Date().toString()}
         </p>
         `
-    )
+        )
+    })
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(phonebook)
+    Person.find({}).then(people => {
+        response.json(people)
+    })
+
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -105,8 +113,7 @@ app.post('/api/persons', (request, response) => {
     response.json(newPerson)
 })
 
-
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on Port: ${PORT}`);
 })
